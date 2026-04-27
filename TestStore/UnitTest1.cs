@@ -19,9 +19,10 @@ public class UnitTest1
         var context = CreateContext();
         context.AddProduct(new Product("1", "A", "M", 10, 1, false));
         context.AddProduct(new Product("2", "B", "M", 20, 1, true));
-        var result = context.GetAll();
+        var expected = new Product("1", "A", "M", 10, 1, false);
+        var result = context.GetAll().ToList();
         
-        Assert.Single(result);
+        Assert.Equal(expected,result[0]);
     }
     [Fact]
     public void GetByNameTest()
@@ -29,9 +30,10 @@ public class UnitTest1
         var context = CreateContext();
         context.AddProduct(new Product("1", "Laptop", "Brand", 1000, 5, false));
         context.AddProduct(new Product("2", "Phone", "Brand", 500, 10, false));
+        var expected = new Product("1", "Laptop", "Brand", 1000, 5, false);
 
         var result = context.GetByName("Laptop").ToList();
-        
+        Assert.Equal(expected,result[0]);
         Assert.Equal("Laptop", result[0].Name);
     }
     
@@ -42,9 +44,12 @@ public class UnitTest1
         context.AddProduct(new Product("1", "P1", "M", 100, 1, false));
         context.AddProduct(new Product("2", "P2", "M", 100, 2, false));
         context.AddProduct(new Product("3", "P3", "M", 200, 1, false));
+        var expected0 = new Product("1", "P1", "M", 100, 1, false);
+        var expected1 = new Product("2", "P2", "M", 100, 2, false);
 
         var result = context.GetByPrice(100).ToList();
-
+        Assert.Equal(expected0,result[0]);
+        Assert.Equal(expected1,result[1]);
         Assert.Equal(2, result.Count);
     }
     [Fact]
@@ -53,10 +58,10 @@ public class UnitTest1
         var context = CreateContext();
         context.AddProduct(new Product("1", "P1", "M", 10, 50, false));
         context.AddProduct(new Product("2", "P2", "M", 10, 20, false));
-
+        var expected = new Product("1", "P1", "M", 10, 50, false);
         var result = context.GetByStock(50).ToList();
 
-        Assert.Single(result);
+        Assert.Equal(expected,result[0]);
         Assert.Equal(50, result[0].StockQuantity);
     }
     [Fact]
