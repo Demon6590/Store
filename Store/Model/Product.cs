@@ -6,9 +6,10 @@ namespace Store.Model;
 [Table("table_products")]
 public record Product(
     [property: Key]
-    [property: Column("id")] int Id,
+    [property: Column("article")] string Article,
     [property: Column("name")] string Name,
     [property: Column("manufacturer")] string Manufacturer,
     [property: Column("price")] decimal Price,
-    [property: Column("stock_quantity")] int StockQuantity
+    [property: Column("stock_quantity")] int StockQuantity,
+    [property: Column("is_delete")] bool isDelete
 );
