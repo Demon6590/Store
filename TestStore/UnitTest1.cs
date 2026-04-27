@@ -59,4 +59,27 @@ public class UnitTest1
         Assert.Single(result);
         Assert.Equal(50, result[0].StockQuantity);
     }
+    
+    public void GetByNameTestNegative()
+    {
+        var context = CreateContext();
+        context.AddProduct(new Product("1", "Existing", "M", 10, 1, false));
+        
+        var result = context.GetByName("NonExistent");
+
+        Assert.Empty(result);
+    }
+    
+    [Fact]
+    public void GetByPriceTestNegative()
+    {
+        var context = CreateContext();
+        context.AddProduct(new Product("1", "P1", "M", 100, 1, false));
+        
+        var result = context.GetByPrice(999);
+
+        Assert.Empty(result);
+    }
+    
+    
 }
