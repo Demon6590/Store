@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,81 +26,47 @@ public class ProductContext : DbContext
             .HasDefaultValue(false); 
     }
     
-    public bool AddProduct(Product p)
+    public void AddProduct(Product p)
     {
-        const string sql = @"
-                           INSERT INTO table_products (article, name, manufacturer, price, stock_quantity) 
-                           VALUES (@Article, @Name, @Manufacturer, @Price, @StockQuantity)
-                           ";
-        var parameters = new[]
-        {
-            new SqliteParameter("@Article", p.Article),
-            new SqliteParameter("@Name", p.Name),
-            new SqliteParameter("@Manufacturer", p.Manufacturer),
-            new SqliteParameter("@Price", p.Price),
-            new SqliteParameter("@StockQuantity", p.StockQuantity),
-        };
-        var result = Database.ExecuteSqlRaw(sql,parameters);
-        
-        return result > 0;
-        
+        Products.Add(p);
     }
-    public bool SoftDelete(string article)
+    public void SoftDelete(string article)
     {
-        const string sql = "UPDATE table_products SET is_delete = 1 WHERE article = @Article";
-        var result = Database.ExecuteSqlRaw(sql, new SqliteParameter("@Article", article));
-        return result > 0;
+        var product = Products.Find(article);
+        var updated = product with { isDelete = true };
+        Entry(product).CurrentValues.SetValues(updated);
+        
+
     }
     
-    public bool UpdateProduct(Product p)
+    public void UpdateProduct(Product p)
     {
-        const string sql = @"
-            UPDATE table_products 
-            SET name = @Name, manufacturer = @Manufacturer, price = @Price, stock_quantity = @Stock 
-            WHERE article = @Article
-            ";
-
-        var parameters = new[] {
-            new SqliteParameter("@Name", p.Name),
-            new SqliteParameter("@Manufacturer", p.Manufacturer),
-            new SqliteParameter("@Price", p.Price),
-            new SqliteParameter("@Stock", p.StockQuantity),
-            new SqliteParameter("@Article", p.Article)
-        };
-
-        var result = Database.ExecuteSqlRaw(sql, parameters);
-        
-        return result > 0;
+        var existing = Products.Find(p.Article);
+        Entry(existing).CurrentValues.SetValues(p);
     }
 
     public IEnumerable<Product> GetAll()
     {
-        const string sql = "SELECT * FROM table_products WHERE is_delete = 0";
-        return Products.FromSqlRaw(sql);
+        return Products
+            .Where(p => !p.isDelete);
     }
 
     public IEnumerable<Product> GetByName(string name)
     {
-        const string sql = "SELECT * FROM table_products WHERE name = @Name AND is_delete = 0";
-
-        var parameter = new SqliteParameter("@Name", name);
-        return Products.FromSqlRaw(sql, parameter);
+        return Products
+            .Where(p => p.Name == name && !p.isDelete);
     }
 
     
     public IEnumerable<Product> GetByPrice(decimal price)
     {
-        const string sql = "SELECT * FROM table_products WHERE price = @Price AND is_delete = 0";
-        var parameter = new SqliteParameter("@Price", price);
-    
-        return Products.FromSqlRaw(sql, parameter);
+        return Products
+            .Where(p => p.Price == price && !p.isDelete);
     }
     
     public IEnumerable<Product> GetByStock(int stock)
     {
-        const string sql = "SELECT * FROM table_products WHERE stock_quantity = @Stock AND is_delete = 0";
-        var parameter = new SqliteParameter("@Stock", stock);
-    
-        return Products.FromSqlRaw(sql, parameter);
+        return Products
+            .Where(p => p.StockQuantity == stock && !p.isDelete);
     }
 }

@@ -6,14 +6,14 @@ using Store.Model;
 const string ConnectionString = @"Data Source=C:\Users\college\RiderProjects\Store\store.db;";
 
 var db = new ProductContext(ConnectionString);
-Console.WriteLine(db.AddProduct(new Product("r4fff","апельсин","Дерево",120,45,false)));
+db.AddProduct(new Product("r5fff","апельсин","Дерево",1320,45,false));
 
 var list = db.GetAll().ToList();
 foreach (var product in list)
 {
     Console.WriteLine(product);
 }
-Console.WriteLine(db.UpdateProduct(new Product("r4fff","апельсин","Дерево",120,42,false)));
+db.UpdateProduct(new Product("r5fff","апельсин","Дерево",120,42,false));
 list = db.GetAll().ToList();
 foreach (var product in list)
 {
@@ -35,7 +35,7 @@ foreach (var product in list)
 {
     Console.WriteLine(product);
 }
-Console.WriteLine(db.SoftDelete("r4fff"));
+db.SoftDelete("r5fff");
 list = db.GetAll().ToList();
 foreach (var product in list)
 {
