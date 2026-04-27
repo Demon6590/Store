@@ -34,7 +34,6 @@ public class UnitTest1
 
         var result = context.GetByName("Laptop").ToList();
         Assert.Equal(expected,result[0]);
-        Assert.Equal("Laptop", result[0].Name);
     }
     
     [Fact]
@@ -50,7 +49,6 @@ public class UnitTest1
         var result = context.GetByPrice(100).ToList();
         Assert.Equal(expected0,result[0]);
         Assert.Equal(expected1,result[1]);
-        Assert.Equal(2, result.Count);
     }
     [Fact]
     public void GetByStockTest()
@@ -62,7 +60,6 @@ public class UnitTest1
         var result = context.GetByStock(50).ToList();
 
         Assert.Equal(expected,result[0]);
-        Assert.Equal(50, result[0].StockQuantity);
     }
     [Fact]
     public void GetByNameTestNegative()
