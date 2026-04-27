@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Store.Model;
 
+/// <summary>
+/// Класс работающий с бд на SQLite
+/// </summary>
 public class ProductContext : DbContext
 {
     private readonly string _connectionString;
