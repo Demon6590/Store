@@ -59,7 +59,7 @@ public class UnitTest1
         Assert.Single(result);
         Assert.Equal(50, result[0].StockQuantity);
     }
-    
+    [Fact]
     public void GetByNameTestNegative()
     {
         var context = CreateContext();
