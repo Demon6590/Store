@@ -29,20 +29,24 @@ public class ProductContext : DbContext
     public void AddProduct(Product p)
     {
         Products.Add(p);
+        SaveChanges();
     }
     public void SoftDelete(string article)
     {
         var product = Products.Find(article);
         var updated = product with { isDelete = true };
         Entry(product).CurrentValues.SetValues(updated);
-        
+        SaveChanges();
 
+        
     }
     
     public void UpdateProduct(Product p)
     {
         var existing = Products.Find(p.Article);
         Entry(existing).CurrentValues.SetValues(p);
+        SaveChanges();
+
     }
 
     public IEnumerable<Product> GetAll()
